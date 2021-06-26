@@ -29,20 +29,23 @@ function buildCharts(selection) {
 
     //read json file
     d3.json("samples.json").then((sampleData) => {
+        console.log("sampleData");
+        console.log(sampleData);
 
         //parse and filter data to get sample's OTU data
         var  parsedData = sampleData.samples;
         console.log(parsedData);
 
-        var sampleDict = parsedData.filter(item.id == selection)[0];
-        console.log(sample.Dict);
+        var sampleDict = parsedData.filter(item => item.id == selection)[0];
+        console.log("sampleDict");
+        console.log(sampleDict);
 
         var sampleValues= sampleDict.sample_values;
         var barChartValues = sampleValues.slice(0,10).reverse();
         console.log(barChartValues);
 
         var idValues = sampleDict.otu_ids;
-        var barChartLabels = idValues.slice(0,10).reverse();
+        var barChartLabels = idValues.slice(0,10).map(otuID => `OTU ${otuID}`).reverse();
         console.log(barChartLabels);
 
         var hovertext = sampleDict.otu_labels;
@@ -79,8 +82,8 @@ function buildCharts(selection) {
         var bubbleChartData = [bubbleChartTrace];
 
         var layout = {
-            height: 500,
-            width: 800,
+            height: 700,
+            width: 1100,
             xaxis: {
                 title: "OTU ID"
             }
@@ -107,9 +110,13 @@ function init() {
             dropdownMenu.append("option").property("value", name).text(name);
        })
 
+       console.log("parsedData[0]");
+       console.log(parsedData[0]);
+
        //build data and charts
        buildCharts(parsedData[0]);
        buildMetadata(parsedData[0]);
+       
 
     });
 }
